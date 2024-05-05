@@ -10,11 +10,10 @@ class Visita():
         self.venta = 0
         self.acum_venta = acum_venta
 
-
     def simular(self, datos):
         self.precio_venta = datos[6]
         rnd_abrio = random.random()
-        if rnd_abrio < 0.70:
+        if rnd_abrio >= 0.30:
             self.abrio = True
             rnd_sexo = random.random()
             if rnd_sexo < datos[4]:
@@ -35,7 +34,7 @@ class Visita():
                 else:
                     self.vendio = False
                     return self.acum_venta
-            else:
+            else: ##es hombre
                 self.es_mujer = False
                 rnd_venta = random.random()
                 if rnd_venta < 0.25:
@@ -59,5 +58,13 @@ class Visita():
             self.abrio = False
             return self.acum_venta
         
-    def __str__(self) -> str:
-        return f"Nro: {self.nro}, Abrio: {self.abrio}, Mujer: {self.es_mujer}, Vendio: {self.vendio}, Cantidad: {self.cantidad}, Venta: {self.venta}, Acumulador: {self.acum_venta}"
+    def __str__(self):
+        # Definir el estado de si es mujer o hombre
+        genero = "Mujer" if self.es_mujer else "Hombre"
+        # Definir si abrió o no
+        abrio_str = "Abrió" if self.abrio else "No abrió"
+        # Definir si vendió o no
+        vendio_str = "Vendió" if self.vendio else "No vendió"
+
+        # Formatear la información en una cadena
+        return f"Nro de visita: {self.nro}, {abrio_str}, Género: {genero}, {vendio_str}, Cantidad: {self.cantidad}, Acumulado: {self.acum_venta}"
