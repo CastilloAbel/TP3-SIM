@@ -30,7 +30,7 @@ class MonteCarloSimulador:
         
         ttk.Label(root, text="Probabilidad de que el que atienda sea hombre:", background=root.cget('background')).grid(row=1, column=0, sticky="w", padx=5, pady=5)
         ttk.Entry(root, textvariable=self.prob_hombre).grid(row=1, column=1, padx=5, pady=5)
-        
+    
         ttk.Label(root, text="Probabilidad de que el que atienda sea mujer:", background=root.cget('background')).grid(row=2, column=0, sticky="w", padx=5, pady=5)
         ttk.Entry(root, textvariable=self.prob_mujer).grid(row=2, column=1, padx=5, pady=5)
         
@@ -75,57 +75,71 @@ class MonteCarloSimulador:
         self.resultados_text = tk.Text(root, height=40, width=100)
         self.resultados_text.grid(row=0, column=2, padx=120, pady=20, rowspan=50)
 
-    def iniciar_simulacion(self):
-        visitas = []
-        n = self.N.get()
-        prob_venta_mujer = self.prob_venta_mujer.get()
-        total_prob_hombre = sum(var.get() for var in self.precios_productos_hombre)
-        total_prob_mujer = sum(var.get() for var in self.precios_productos_mujer)
-        ventas_prob_hombre = [var.get() for var in self.precios_productos_hombre]
-        ventas_prob_mujer = [var.get() for var in self.precios_productos_mujer]
-        prob_mujer = self.prob_mujer.get()
-        prob_hombre = self.prob_hombre.get()
-        precio = self.precio_producto.get()
-        i = self.I.get()
-        j = self.J.get()
-        
-        datos = [n,prob_venta_mujer,ventas_prob_hombre, 
-                 ventas_prob_mujer, prob_mujer, prob_hombre, precio]
-        # Validar que la suma de las probabilidades de venta de productos sea 1
-        #if total_prob_hombre != 1 or total_prob_mujer != 1 or prob_mujer + prob_hombre != 1:
-        #    messagebox.showerror("Error", "La suma de las probabilidades de venta de productos debe ser igual a 1.")
-        #    return
-        
-        for x in range(n):
-            if x == 0:
-                v = Visita(x+1, 0)
-                acum = v.simular(datos)
-                visitas.append(v)
-            else:
-                v = Visita(x+1, acum)
-                acum = v.simular(datos)
-                visitas.append(v)
-        
-        # Guardar las n las visitas en un archivo
-        filename = "visitas.txt"
-        with open(filename, "w") as file:
-            for visita in visitas:
-                file.write(str(visita) + "\n")
     
-        print("Las visitas se han guardado en el archivo:", filename)
+    
 
-        # Mostrar i visitas a partir de la visita J en la ventana
-        resultados = ""
-        for idx, visita in enumerate(visitas[j-1:j+i], start=j):
-            resultados += f"Iteración {idx}: {visita}\n"
+    def iniciar_simulacion(self):
+
+        prob_hombre = self.prob_hombre.get()
+        prob_mujer = self.prob_mujer.get()
+        precios_hombre = sum(i.get() for i in self.precios_productos_hombre)
+        precios_mujer = sum(i.get() for i in self.precios_productos_mujer)
         
-       # Mostrar la información de la última visita simulada con espacio antes y después
-        resultados += f"\nInformación de la última visita simulada:\n{visitas[-1]}\n"
+        
+        if prob_hombre + prob_mujer != 1:
+            messagebox.showerror("Error", "La suma de las probabilidades de que el que atienda sea hombre y mujer debe ser igual a 1.")
+        
+        elif precios_hombre != 1:
+            messagebox.showerror("Error", "La suma de las probabilidades de venta de los hombres debe ser igual a 1.")
 
-        # Limpiar el widget Text antes de agregar los resultados
-        self.resultados_text.delete("1.0", tk.END)
-        # Agregar los resultados al widget Text
-        self.resultados_text.insert(tk.END, resultados)
+        elif precios_mujer != 1:
+            messagebox.showerror("Error", "La suma de las probabilidades de venta de las mujeres debe ser igual a 1.")
+        
+        else:
+            visitas = []
+            n = self.N.get()
+            prob_venta_mujer = self.prob_venta_mujer.get()
+            ventas_prob_hombre = [var.get() for var in self.precios_productos_hombre]
+            ventas_prob_mujer = [var.get() for var in self.precios_productos_mujer]
+            prob_mujer = self.prob_mujer.get()
+            prob_hombre = self.prob_hombre.get()
+            precio = self.precio_producto.get()
+            i = self.I.get()
+            j = self.J.get()
+            
+            datos = [n,prob_venta_mujer,ventas_prob_hombre, 
+                    ventas_prob_mujer, prob_mujer, prob_hombre, precio]
+            
+            for x in range(n):
+                if x == 0:
+                    v = Visita(x+1, 0)
+                    acum = v.simular(datos)
+                    visitas.append(v)
+                else:
+                    v = Visita(x+1, acum)
+                    acum = v.simular(datos)
+                    visitas.append(v)
+            
+            # Guardar las n las visitas en un archivo
+            filename = "visitas.txt"
+            with open(filename, "w") as file:
+                for visita in visitas:
+                    file.write(str(visita) + "\n")
+        
+            print("Las visitas se han guardado en el archivo:", filename)
+
+            # Mostrar i visitas a partir de la visita J en la ventana
+            resultados = ""
+            for idx, visita in enumerate(visitas[j-1:j+i], start=j):
+                resultados += f"Iteración {idx}: {visita}\n"
+            
+        # Mostrar la información de la última visita simulada con espacio antes y después
+            resultados += f"\nInformación de la última visita simulada:\n{visitas[-1]}\n"
+
+            # Limpiar el widget Text antes de agregar los resultados
+            self.resultados_text.delete("1.0", tk.END)
+            # Agregar los resultados al widget Text
+            self.resultados_text.insert(tk.END, resultados)
 
 # Crear la ventana principal de la aplicación
 root = tk.Tk()
