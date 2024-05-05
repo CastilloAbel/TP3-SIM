@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import messagebox
 from Visita import Visita
 from tkinter import Scrollbar
+from fractions import Fraction
 
 class MonteCarloSimulador:
     def __init__(self, root):
@@ -82,16 +83,16 @@ class MonteCarloSimulador:
 
         prob_hombre = self.prob_hombre.get()
         prob_mujer = self.prob_mujer.get()
-        precios_hombre = sum([i.get() for i in self.precios_productos_hombre])
-        precios_mujer = sum([i.get() for i in self.precios_productos_mujer])
-        
+        precios_hombre = round(sum(round(i.get(), 6) for i in self.precios_productos_hombre), 6)
+        precios_mujer = round(sum(round(i.get(), 6) for i in self.precios_productos_mujer), 6)
+        numero_periodico = Fraction(9, 9)
         
         if prob_hombre + prob_mujer != 1:
             messagebox.showerror("Error", "La suma de las probabilidades de que el que atienda sea hombre y mujer debe ser igual a 1.")
-        
-        elif precios_hombre != 1:
-            messagebox.showerror("Error", "La suma de las probabilidades de venta de los hombres debe ser igual a 1.")
 
+        elif precios_hombre != 1 or round(precios_hombre, 6) != 1:
+            messagebox.showerror("Error", "La suma de las probabilidades de venta de los hombres debe ser igual a 1.")
+            print(precios_hombre);
         elif precios_mujer != 1:
             messagebox.showerror("Error", "La suma de las probabilidades de venta de las mujeres debe ser igual a 1.")
         
