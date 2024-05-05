@@ -82,8 +82,8 @@ class MonteCarloSimulador:
 
         prob_hombre = self.prob_hombre.get()
         prob_mujer = self.prob_mujer.get()
-        precios_hombre = sum(i.get() for i in self.precios_productos_hombre)
-        precios_mujer = sum(i.get() for i in self.precios_productos_mujer)
+        precios_hombre = sum([i.get() for i in self.precios_productos_hombre])
+        precios_mujer = sum([i.get() for i in self.precios_productos_mujer])
         
         
         if prob_hombre + prob_mujer != 1:
@@ -97,6 +97,7 @@ class MonteCarloSimulador:
         
         else:
             visitas = []
+            ventas = []
             n = self.N.get()
             prob_venta_mujer = self.prob_venta_mujer.get()
             ventas_prob_hombre = [var.get() for var in self.precios_productos_hombre]
@@ -121,12 +122,18 @@ class MonteCarloSimulador:
                     visitas.append(v)
             
             # Guardar las n las visitas en un archivo
+            # Acumular las visitas que vendieron revistas
             filename = "visitas.txt"
             with open(filename, "w") as file:
                 for visita in visitas:
                     file.write(str(visita) + "\n")
+                    if visita.vendio:
+                        ventas.append(visita)
         
             print("Las visitas se han guardado en el archivo:", filename)
+
+            # Probabilidad de que el vendedor venda revistas
+            prob_vender = len(ventas) / n
 
             # Mostrar i visitas a partir de la visita J en la ventana
             resultados = ""
@@ -135,6 +142,7 @@ class MonteCarloSimulador:
             
         # Mostrar la información de la última visita simulada con espacio antes y después
             resultados += f"\nInformación de la última visita simulada:\n{visitas[-1]}\n"
+            resultados += f"\nProbabilidad de vender suscripciones: {prob_vender}\n"
 
             # Limpiar el widget Text antes de agregar los resultados
             self.resultados_text.delete("1.0", tk.END)
