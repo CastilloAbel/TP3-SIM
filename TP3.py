@@ -72,7 +72,8 @@ class MonteCarloSimulador:
         ttk.Button(root, text="Iniciar Simulación", command=self.iniciar_simulacion, style="Custom.TButton").grid(row=16, columnspan=2, pady=10)
 
         # Crear un widget Text para mostrar los resultados
-        self.resultados_text = tk.Text(root, height=30, width=120)
+        # cambiar el ancho de la caja de texto de 120 a 100
+        self.resultados_text = tk.Text(root, height=30, width=100)
         self.resultados_text.grid(row=0, column=2, padx=40, pady=20, rowspan=50)
 
         # Agregar la barra de desplazamiento vertical
