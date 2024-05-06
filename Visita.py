@@ -67,4 +67,4 @@ class Visita():
         vendio_str = "Vendió" if self.vendio else "No vendió"
 
         # Formatear la información en una cadena
-        return f"Nro de visita: {self.nro}, {abrio_str}, Género: {genero}, {vendio_str}, Cantidad: {self.cantidad}, Acumulado: {self.acum_venta}"
+        return f"Nro de visita: {self.nro:,} - {abrio_str} - Género: {genero} - {vendio_str} - Cantidad: {self.cantidad:,} - Acumulado: {self.acum_venta:,.2f}"

@@ -58,10 +58,10 @@ class MonteCarloSimulador:
         ttk.Label(root, text="Precio del producto si se realiza una venta:", background=root.cget('background')).grid(row=13, column=0, sticky="w", padx=5, pady=5)
         ttk.Entry(root, textvariable=self.precio_producto).grid(row=13, column=1, padx=5, pady=5)
         
-        ttk.Label(root, text="Cantidad de visitas a mostrar (I):", background=root.cget('background')).grid(row=14, column=0, sticky="w", padx=5, pady=5)
+        ttk.Label(root, text="Cantidad de visitas a mostrar: ", background=root.cget('background')).grid(row=14, column=0, sticky="w", padx=5, pady=5)
         ttk.Entry(root, textvariable=self.I).grid(row=14, column=1, padx=5, pady=5)
         
-        ttk.Label(root, text="Visita específica a mostrar (J):", background=root.cget('background')).grid(row=15, column=0, sticky="w", padx=10, pady=5)
+        ttk.Label(root, text="Mostrar visitas desde: ", background=root.cget('background')).grid(row=15, column=0, sticky="w", padx=10, pady=5)
         ttk.Entry(root, textvariable=self.J).grid(row=15, column=1, padx=5, pady=5)
         
         # Crear un estilo para el botón
@@ -71,19 +71,26 @@ class MonteCarloSimulador:
         # Crear el botón y aplicar el estilo
         ttk.Button(root, text="Iniciar Simulación", command=self.iniciar_simulacion, style="Custom.TButton").grid(row=16, columnspan=2, pady=10)
 
-        # Crear un widget Text para mostrar los resultados
-        # cambiar el ancho de la caja de texto de 120 a 100
-        self.resultados_text = tk.Text(root, height=30, width=100)
-        self.resultados_text.grid(row=0, column=2, padx=40, pady=20, rowspan=50)
+         # Agregar un scrollbar vertical
+        scrollbar_y = ttk.Scrollbar(root, orient="vertical")
+        scrollbar_y.grid(row=0, column=3, sticky="ns", rowspan=50)
 
-        # Agregar la barra de desplazamiento vertical
-        scrollbar = ttk.Scrollbar(root, orient="vertical", command=self.resultados_text.yview)
-        scrollbar.grid(row=0, column=3, sticky="ns", rowspan=50)
-        scrollbar.config()
+        # Crear un widget Text para mostrar los resultados de la iteración
+        self.resultados_text = tk.Text(root, height=30, width=115, yscrollcommand=scrollbar_y.set)
+        self.resultados_text.grid(row=2, column=2, padx=40, pady=20, rowspan=10)
 
-        # Configurar el widget Text para que use la barra de desplazamiento
-        self.resultados_text.config(yscrollcommand=scrollbar.set)
+        # Configurar la vinculación entre el scrollbar y el widget Text
+        scrollbar_y.config(command=self.resultados_text.yview)
+
+        # Desabilitar edicion en la ventana de resultados
+        self.resultados_text.config(state=tk.DISABLED)
+
+         # Crear un widget Text para mostrar los resultados de la iteración
+        self.resultados_resumen = tk.Text(root, height=5, width=115, yscrollcommand=scrollbar_y.set)
+        self.resultados_resumen.grid(row=10, column=2, padx=40, pady=20, rowspan=10)
     
+        # Desabilitar edicion en la ventana resumen
+        self.resultados_resumen.config(state=tk.DISABLED)
 
     def iniciar_simulacion(self):
 
@@ -148,13 +155,26 @@ class MonteCarloSimulador:
                 resultados += f"Iteración {idx}: {visita}\n"
             
         # Mostrar la información de la última visita simulada con espacio antes y después
-            resultados += f"\nInformación de la última visita simulada:\n{visitas[-1]}\n"
-            resultados += f"\nProbabilidad de vender suscripciones: {prob_vender}\n"
+            resumen = f"\nInformación de la última visita simulada:\n{visitas[-1]}\n"
+            resumen += f"\nProbabilidad de vender suscripciones: {prob_vender:.4f}\n"
 
+            # Habilitar ventana de resultados
+            self.resultados_text.config(state=tk.NORMAL)
             # Limpiar el widget Text antes de agregar los resultados
             self.resultados_text.delete("1.0", tk.END)
             # Agregar los resultados al widget Text
             self.resultados_text.insert(tk.END, resultados)
+            # Desabilitar edicion en la ventana de resultados
+            self.resultados_text.config(state=tk.DISABLED)
+            # Habilitar ventana de resumen
+            self.resultados_resumen.config(state=tk.NORMAL)
+            # Limpiar el widget Text antes de agregar los resultados
+            self.resultados_resumen.delete("1.0", tk.END)
+            # Agregar los resultados al widget Text
+            self.resultados_resumen.insert(tk.END, resumen)
+            # Desabilitar edicion en la ventana de resultados
+            self.resultados_resumen.config(state=tk.DISABLED)
+
 
 # Crear la ventana principal de la aplicación
 root = tk.Tk()
