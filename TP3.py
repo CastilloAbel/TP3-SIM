@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from Visita import Visita
-from tkinter import Scrollbar
 from fractions import Fraction
 
 class MonteCarloSimulador:
@@ -73,10 +72,15 @@ class MonteCarloSimulador:
         ttk.Button(root, text="Iniciar Simulación", command=self.iniciar_simulacion, style="Custom.TButton").grid(row=16, columnspan=2, pady=10)
 
         # Crear un widget Text para mostrar los resultados
-        self.resultados_text = tk.Text(root, height=40, width=100)
-        self.resultados_text.grid(row=0, column=2, padx=120, pady=20, rowspan=50)
+        self.resultados_text = tk.Text(root, height=30, width=120)
+        self.resultados_text.grid(row=0, column=2, padx=40, pady=20, rowspan=50)
 
-    
+        # Agregar la barra de desplazamiento vertical
+        scrollbar = ttk.Scrollbar(root, orient="vertical", command=self.resultados_text.yview)
+        scrollbar.grid(row=0, column=3, sticky="ns", rowspan=50)
+        scrollbar.config()
+        # Configurar el widget Text para que use la barra de desplazamiento
+        self.resultados_text.config(yscrollcommand=scrollbar.set)
     
 
     def iniciar_simulacion(self):
