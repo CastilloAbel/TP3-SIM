@@ -87,7 +87,7 @@ class MonteCarloSimulador:
         self.resultados_text.config(state=tk.DISABLED)
 
          # Crear un widget Text para mostrar los resultados de la iteración
-        self.resultados_resumen = tk.Text(root, height=6, width=118, yscrollcommand=scrollbar_y.set)
+        self.resultados_resumen = tk.Text(root, height=6, width=122, yscrollcommand=scrollbar_y.set)
         self.resultados_resumen.grid(row=17, column=2, padx=30, pady=10, rowspan=50)
     
         # Desabilitar edicion en la ventana resumen
