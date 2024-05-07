@@ -75,9 +75,10 @@ class MonteCarloSimulador:
         scrollbar_y = ttk.Scrollbar(root, orient="vertical")
         scrollbar_y.grid(row=0, column=3, sticky="ns", rowspan=50)
 
-        # Crear un widget Text para mostrar los resultados de la iteración
-        self.resultados_text = tk.Text(root, height=30, width=118, yscrollcommand=scrollbar_y.set)
-        self.resultados_text.grid(row=1, column=2, padx=30, pady=10, rowspan=50, sticky="n")
+        # Crear un widget Text para mostrar los resultados de la iteración 30padx
+        #################
+        self.resultados_text = tk.Text(root, height=30, width=122, yscrollcommand=scrollbar_y.set)
+        self.resultados_text.grid(row=1, column=2, padx=10, pady=10, rowspan=50, sticky="n")
 
         # Configurar la vinculación entre el scrollbar y el widget Text
         scrollbar_y.config(command=self.resultados_text.yview)
@@ -151,7 +152,7 @@ class MonteCarloSimulador:
 
             # Mostrar i visitas a partir de la visita J en la ventana
             resultados = ""
-            for idx, visita in enumerate(visitas[j-1:j+i], start=j):
+            for idx, visita in enumerate(visitas[j-1:j+i-1], start=j):
                 resultados += f"Iteración: {idx:5,} - {visita}\n"
             
         # Mostrar la información de la última visita simulada con espacio antes y después
