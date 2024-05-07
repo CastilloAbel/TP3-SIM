@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from Visita import Visita
+from VisitaV1 import VisitaV1
 from fractions import Fraction
 
 class MonteCarloSimulador:
@@ -26,23 +26,23 @@ class MonteCarloSimulador:
         
         # Crear los widgets para introducir los parámetros
         ttk.Label(root, text="Cantidad de visitas (N):", background=root.cget('background')).grid(row=0, column=0, sticky="w", padx=5, pady=5)
-        ttk.Entry(root, textvariable=self.N).grid(row=0, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.N, width=6).grid(row=0, column=1, padx=5, pady=5)
         
         ttk.Label(root, text="Probabilidad de que el que atienda sea hombre:", background=root.cget('background')).grid(row=1, column=0, sticky="w", padx=5, pady=5)
-        ttk.Entry(root, textvariable=self.prob_hombre).grid(row=1, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.prob_hombre, width=6).grid(row=1, column=1, padx=5, pady=5)
     
         ttk.Label(root, text="Probabilidad de que el que atienda sea mujer:", background=root.cget('background')).grid(row=2, column=0, sticky="w", padx=5, pady=5)
-        ttk.Entry(root, textvariable=self.prob_mujer).grid(row=2, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.prob_mujer, width=6).grid(row=2, column=1, padx=5, pady=5)
         
         ttk.Label(root, text="Probabilidad de venta si es mujer:" ,background=root.cget('background')).grid(row=3, column=0, sticky="w", padx=5, pady=5)
-        ttk.Entry(root, textvariable=self.prob_venta_mujer).grid(row=3, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.prob_venta_mujer, width=6).grid(row=3, column=1, padx=5, pady=5)
         
         ttk.Label(root, text="Probabilidad de venta de productos si es hombre:", background=root.cget('background')).grid(row=4, column=0, sticky="w", padx=5, pady=5)
         self.hombre_entries = []
         
         for i in range(4):
             ttk.Label(root, text=f"Probabilidad de vender {i+1} producto(s):", background=root.cget('background')).grid(row=5+i, column=0, sticky="w", padx=5, pady=5)
-            entry = ttk.Entry(root, textvariable=self.precios_productos_hombre[i])
+            entry = ttk.Entry(root, textvariable=self.precios_productos_hombre[i], width=6)
             entry.grid(row=5+i, column=1, padx=5, pady=5)
             self.hombre_entries.append(entry)
         
@@ -51,18 +51,18 @@ class MonteCarloSimulador:
         
         for i in range(3):
             ttk.Label(root, text=f"Probabilidad de vender {i+1} producto(s):", background=root.cget('background')).grid(row=10+i, column=0, sticky="w", padx=10, pady=5)
-            entry = ttk.Entry(root, textvariable=self.precios_productos_mujer[i])
+            entry = ttk.Entry(root, textvariable=self.precios_productos_mujer[i], width=6)
             entry.grid(row=10+i, column=1, padx=10, pady=5)
             self.mujer_entries.append(entry)
         
         ttk.Label(root, text="Precio del producto si se realiza una venta:", background=root.cget('background')).grid(row=13, column=0, sticky="w", padx=5, pady=5)
-        ttk.Entry(root, textvariable=self.precio_producto).grid(row=13, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.precio_producto, width=6).grid(row=13, column=1, padx=5, pady=5)
         
         ttk.Label(root, text="Cantidad de visitas a mostrar: ", background=root.cget('background')).grid(row=14, column=0, sticky="w", padx=5, pady=5)
-        ttk.Entry(root, textvariable=self.I).grid(row=14, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.I, width=6).grid(row=14, column=1, padx=5, pady=5)
         
         ttk.Label(root, text="Mostrar visitas desde: ", background=root.cget('background')).grid(row=15, column=0, sticky="w", padx=10, pady=5)
-        ttk.Entry(root, textvariable=self.J).grid(row=15, column=1, padx=5, pady=5)
+        ttk.Entry(root, textvariable=self.J, width=6).grid(row=15, column=1, padx=5, pady=5)
         
         # Crear un estilo para el botón
         style = ttk.Style()
@@ -76,8 +76,8 @@ class MonteCarloSimulador:
         scrollbar_y.grid(row=0, column=3, sticky="ns", rowspan=50)
 
         # Crear un widget Text para mostrar los resultados de la iteración
-        self.resultados_text = tk.Text(root, height=30, width=115, yscrollcommand=scrollbar_y.set)
-        self.resultados_text.grid(row=2, column=2, padx=40, pady=20, rowspan=10)
+        self.resultados_text = tk.Text(root, height=30, width=118, yscrollcommand=scrollbar_y.set)
+        self.resultados_text.grid(row=1, column=2, padx=30, pady=10, rowspan=50, sticky="n")
 
         # Configurar la vinculación entre el scrollbar y el widget Text
         scrollbar_y.config(command=self.resultados_text.yview)
@@ -86,8 +86,8 @@ class MonteCarloSimulador:
         self.resultados_text.config(state=tk.DISABLED)
 
          # Crear un widget Text para mostrar los resultados de la iteración
-        self.resultados_resumen = tk.Text(root, height=5, width=115, yscrollcommand=scrollbar_y.set)
-        self.resultados_resumen.grid(row=10, column=2, padx=40, pady=20, rowspan=10)
+        self.resultados_resumen = tk.Text(root, height=6, width=118, yscrollcommand=scrollbar_y.set)
+        self.resultados_resumen.grid(row=11, column=2, padx=30, pady=10, rowspan=50)
     
         # Desabilitar edicion en la ventana resumen
         self.resultados_resumen.config(state=tk.DISABLED)
@@ -127,11 +127,11 @@ class MonteCarloSimulador:
             
             for x in range(n):
                 if x == 0:
-                    v = Visita(x+1, 0)
+                    v = VisitaV1(x+1, 0)
                     acum = v.simular(datos)
                     visitas.append(v)
                 else:
-                    v = Visita(x+1, acum)
+                    v = VisitaV1(x+1, acum)
                     acum = v.simular(datos)
                     visitas.append(v)
             
@@ -152,7 +152,7 @@ class MonteCarloSimulador:
             # Mostrar i visitas a partir de la visita J en la ventana
             resultados = ""
             for idx, visita in enumerate(visitas[j-1:j+i], start=j):
-                resultados += f"Iteración {idx}: {visita}\n"
+                resultados += f"Iteración: {idx:5,} - {visita}\n"
             
         # Mostrar la información de la última visita simulada con espacio antes y después
             resumen = f"\nInformación de la última visita simulada:\n{visitas[-1]}\n"

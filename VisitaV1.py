@@ -1,5 +1,5 @@
 import random
-class Visita():
+class VisitaV1():
     def __init__(self, nro:int, acum_venta:int):
         self.nro = nro
         self.abrio = False
@@ -67,4 +67,4 @@ class Visita():
         vendio_str = "Vendió" if self.vendio else "No vendió"
 
         # Formatear la información en una cadena
-        return f"Nro de visita: {self.nro}, {abrio_str}, Género: {genero}, {vendio_str}, Cantidad: {self.cantidad}, Acumulado: {self.acum_venta}"
+        return f"Nro de visita: {self.nro:5,} - {abrio_str:8} - Género: {genero:6} - {vendio_str:9} - Cantidad: {self.cantidad:2} - Acumulado: {self.acum_venta:9,.2f}"
